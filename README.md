@@ -1,5 +1,10 @@
-# heart_failure_api
-Heart Failure Prediction
+# Descrição do MVP Heart Failures
+
+Este projeto foi desenvolvido com o objetivo de oferecer uma solução para classificar a probabilidade de um paciente desenvolver uma doença cardíaca, com base em informações obtidas através de exames realizados. O desenvolvimento faz parte do currículo da Pós-Graduação em Engenharia de Software da PUC-Rio, iniciado no módulo de Qualidade de Software, Segurança e Sistemas Inteligentes.
+
+Esta API utiliza o modelo treinado pelo notebook, disponibilizado na pasta **MachineLearning/notebooks** deste repositório, que explora um conjunto de dados de insuficiência cardíaca obtido do site Kaggle (https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction), voltado para a predição de doenças cardíacas. 
+
+Apesar de conseguir utilizar a API através de linha de comando ou algum aplicativo, o frontend deste MVP foi disponibilizado no endereço https://github.com/valkcastellani/heart_failure_frontend.
 
 ---
 
@@ -107,7 +112,7 @@ O Docker Compose simplifica a definição e execução de aplicativos Docker de 
 
 ---
 
-# Testando a API de Pacientes com PyTest (Testes Unitários)
+# Testando a API do MVP Heart Failures com PyTest (Testes Unitários)
 
 ## Como Rodar os Testes
 
@@ -131,84 +136,23 @@ Para rodar os testes unitários da aplicação, siga os passos abaixo:
 
 3. **Verifique os resultados:**
 
-   O `pytest` exibirá os resultados dos testes no terminal. Cada teste que passar será marcado com um ponto (`.`), enquanto os testes que falharem serão detalhados com informações sobre os erros.
+   O `pytest` exibirá os resultados dos testes diretamente no terminal. Cada teste bem-sucedido será indicado por um ponto (.), enquanto os testes que falharem serão acompanhados de detalhes sobre os erros.
 
-## Cobertura dos Testes
+   No caso do arquivo test_modelos.py, o retorno será `FF.`, como mostrado na imagem abaixo:
 
-Os testes unitários cobrem as seguintes funcionalidades da API:
+   ![Execução do PyTest no MVP](https://github.com/valkcastellani/heart_failure_api/blob/master/imagens/pytest-modelos.png)
+   
+   Isso indica que os modelos ET (ExtraTreesClassifier) e KNN (KNeighborsClassifier) não conseguiram atingir a meta pré-definida de 0,8 (80%) de acurácia.
 
-1. **Listagem de Pacientes (`GET /paciente`):**
 
-   - Verifica se a rota retorna uma lista de pacientes quando existem pacientes cadastrados.
-   - Verifica se a rota retorna uma lista vazia quando não existem pacientes cadastrados.
+### Segurança da Informação e Desenvolvimento Seguro
 
-2. **Busca de Paciente por CPF (`GET /paciente/<cpf>`):**
+É fundamental implementar a criptografia dos dados trocados entre o frontend e o backend para garantir a segurança das informações pessoais dos pacientes. Dados sensíveis, como resultados de exames, devem ser protegidos durante o transporte e armazenamento, utilizando métodos como HTTPS para comunicação segura e a criptografia de informações no banco de dados. Essas medidas reduzem o risco de interceptação ou acesso indevido às informações.
 
-   - Verifica se a rota retorna os dados do paciente corretamente quando o CPF existe no banco de dados.
-   - Verifica se a rota retorna um erro 404 quando o CPF não é encontrado no banco de dados.
-
-3. **Adição de Novo Paciente (`POST /paciente/<cpf>`):**
-
-   - Verifica se um novo paciente é adicionado com sucesso.
-   - Verifica se a rota retorna um erro 409 quando há duplicidade de CPF.
-
-4. **Atualização de Paciente (`PUT /paciente/<cpf>`):**
-
-   - Verifica se um paciente existente é atualizado com sucesso.
-   - Verifica se a rota retorna um erro 404 quando o CPF não é encontrado no banco de dados.
-
-5. **Deleção de Paciente (`DELETE /paciente/<cpf>`):**
-   - Verifica se um paciente é deletado com sucesso.
-   - Verifica se a rota retorna um erro 404 quando o CPF não é encontrado no banco de dados.
-
-# Testando a API de Pacientes com Locust (Teste de Carga)
-
-Este projeto inclui um arquivo de teste para realizar testes de carga na API usando o Locust. Siga as instruções abaixo para configurar e executar o teste.
-
-## Pré-requisitos
-
-Antes de começar, você precisa ter o Locust instalado. Você pode instalá-lo usando pip:
-
-```bash
-pip3 install locust
-```
-
-## Executando o teste de carga
-
-O arquivo de teste está localizado na pasta `test` e seu nome é `load_test.py`. Para executar o teste de carga, siga os passos abaixo:
-
-1.  Certifique-se de que a aplicação a ser testada está rodando no **`localhost`** na porta **`5000`**.
-2.  Navegue até o diretório raiz do projeto:
-
-```bash
-cd caminho/para/o/projeto
-```
-
-3.  Execute o Locust apontando para o arquivo de teste:
-
-```bash
-locust -f test/load_test.py -H http://localhost:5000
-```
-
-4.  Abra o navegador e acesse o seguinte endereço para abrir a interface web do Locust:
-
-```bash
-http://localhost:8089
-```
-
-5.  Na interface web do Locust, configure o número de usuários simultâneos (Number of total users to simulate) e a taxa de geração de novos usuários (Spawn rate).
-6.  Clique no botão "Start swarming" para iniciar o teste de carga.
-
-### Configurações do `load_test.py`
-
-O arquivo **`load_test.py`** contém a definição das tarefas que serão executadas durante o teste de carga. Você pode personalizar este arquivo para atender às necessidades específicas do seu teste.
-
-### Analisando os resultados
-
-Após iniciar o teste de carga, a interface web do Locust exibirá gráficos e estatísticas em tempo real, permitindo que você monitore o desempenho da sua API. Você pode usar essas informações para identificar possíveis gargalos e otimizar o desempenho da sua API.
+Além disso, é importante adotar práticas de desenvolvimento seguro, como autenticação robusta, autorização baseada em papéis de usuário e monitoramento de acesso aos dados. Implementar essas medidas no frontend e no backend garante que apenas pessoas autorizadas possam visualizar ou modificar informações confidenciais, assegurando a privacidade e integridade dos dados dos pacientes.
 
 ---
 
 # Contribuindo
 
-Se você encontrar qualquer problema ou tiver sugestões para melhorar a API, os testes unitários, os testes de carga, sinta-se à vontade para abrir uma _issue_ ou enviar um _pull request_.
+Se você encontrar qualquer problema ou tiver sugestões para melhorar a API, os testes unitários, sinta-se à vontade para abrir uma _issue_ ou enviar um _pull request_.
